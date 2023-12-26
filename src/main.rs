@@ -1,5 +1,5 @@
 use clap::Parser;
-use simple_steam_totp::{generate};
+use simple_steam_totp::generate;
 
 fn find_default_steamcmd() -> &'static str {
     if cfg!(target_os = "windows") {
@@ -35,15 +35,14 @@ struct Args {
     // Steamcmd args
     #[clap(short, long)]
     args: String,
+
+    // Flag to only generate and return the TOTP code
+    #[clap(long)]
+    code_only: bool,
 }
 
 fn main() {
     let args = Args::parse();
-
-    if !std::path::Path::new(&args.path).exists() {
-        println!("Steamcmd executable not found at {}. Please specify with --path", args.path);
-        std::process::exit(1);
-    }
 
     let totp = match generate(&args.secret) {
         Ok(code) => code,
@@ -52,6 +51,16 @@ fn main() {
             std::process::exit(1);
         }
     };
+
+    if args.code_only {
+        println!("{}", totp);
+        return;
+    }
+
+    if !std::path::Path::new(&args.path).exists() {
+        println!("Steamcmd executable not found at {}. Please specify with --path", args.path);
+        std::process::exit(1);
+    }
 
     let cmd_arg = format!("+login {} {} {} {}", &args.username, &args.password, &totp, &args.args);
 

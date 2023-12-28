@@ -7,7 +7,7 @@ A simple tool that automatically generates a 2FA Steam Guard code and then runs 
 You can either clone this and build it yourself or use the supplied binaries for both Windows and Linux.
 
 ```bash
-git clone https://github.com/weilbyte/steamcmd-2fa
+git clone https://github.com/KlimeSE/klime-steamcmd-2fa
 cd steamcmd-2fa
 cargo build
 ```
@@ -24,9 +24,12 @@ OPTIONS:
         --path <PATH>               Path to steamcmd binary
     -s, --secret <SECRET>           2FA shared_secret (must be base64 encoded)
     -u, --username <USERNAME>       Username to log in with
+        --code-only                 Generates TOTP code for authentication
 ```
 
-For example, instead of running `steamcmd +login exampleuser examplepass +quit`, you would run `steamcmd-2fa --path /home/steam/steamcmd --username exampleuser --password examplepass --secret YOURSECRET --args "+quit"`. 
+For example, instead of running `steamcmd +login exampleuser examplepass +quit`, you would run `steamcmd-2fa --path /home/steam/steamcmd --username exampleuser --password examplepass --secret YOURSECRET --args "+quit"`.
+
+To simply retrieve a token, run `steamcmd-2fa --username exampleuser --password examplepassword --secret examplesecret --args "+quit" --code-only`
 
 You can get your 2FA seed by [various methods](https://github.com/SteamTimeIdler/stidler/wiki/Getting-your-%27shared_secret%27-code-for-use-with-Auto-Restarter-on-Mobile-Authentication). Your seed here is the `shared_secret`.
 
